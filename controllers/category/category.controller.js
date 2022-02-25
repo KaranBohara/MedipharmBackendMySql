@@ -3,8 +3,8 @@ let config = require('../../config/config');
 const addCategory=async (req,res) =>{
     var category=req.body;
     try {
-        var sqlquery = `CALL sp_InsertCategory(?,?)`;
-        config.query(sqlquery,[category.CId,category.Category],(err,data)=>
+        var sqlquery = `CALL sp_InsertCategory(?)`;
+        config.query(sqlquery,[category.Category],(err,data)=>
         {
             if(data)
             {
