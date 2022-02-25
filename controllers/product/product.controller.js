@@ -1,10 +1,12 @@
 let config = require('../../config/config');
 
-const addCategory=async (req,res) =>{
-    var category=req.body;
+const addProduct=async (req,res) =>{
+    var product=req.body;
     try {
-        var sqlquery = `CALL sp_InsertCategory(?,?)`;
-        config.query(sqlquery,[category.CId,category.Category],(err,data)=>
+        var sqlquery = `Insert into Products(PId,ProductName,Description,Image,CId,Manufacturer,Quantity,Price,Discount,StatusId) 
+        Values(?,?,?,?,?,?,?,?,?,?)`;
+        config.query(sqlquery,[product.PId,product.ProductName,product.Description,product.Image,product.CId,
+            product.Manufacturer,product.Quantity,product.Price,product.Discount,product.StatusId],(err,data)=>
         {
             if(data)
             {
@@ -12,7 +14,7 @@ const addCategory=async (req,res) =>{
                     {
                         data:data,
                         success:true,
-                        message:"Category Created Successfully"
+                        message:"Product Created Successfully"
                     })
             }
             else
@@ -31,10 +33,10 @@ const addCategory=async (req,res) =>{
     console.log(err);
     }
 }
-const getCategories=async(req,res)=>
+const getProducts=async(req,res)=>
 {
     try{
-        var sqlquery=`Select * from Category`;
+        var sqlquery=`Select * from vw_Product`;
         config.query(sqlquery,(err,data)=>
         {
             if(data)
@@ -62,11 +64,11 @@ const getCategories=async(req,res)=>
            console.log(err);
        }
 }
-const getCategory=async(req,res)=>
+const getProduct=async(req,res)=>
 {
     var id=req.params.id;
     try{
-        var sqlquery=`Select * from Category where CId=${id}`;
+        var sqlquery=`Select * from vw_Product where PId=${id}`;
         config.query(sqlquery,(err,data)=>
         {
             if(data)
@@ -94,13 +96,15 @@ const getCategory=async(req,res)=>
            console.log(err);
        }
 }
-const updateCategory=async(req,res)=>
+const updateProduct=async(req,res)=>
 {
-    var category=req.body;
+    var product=req.body;
     var id=req.params.id;
     try{
-        var sqlquery=`update Category set Category=? where CId=${id}`;
-        config.query(sqlquery,[category.Category],(err,data)=>
+        var sqlquery=`update Products set ProductName=?,Description=?,Image=?,CId=?,Manufacturer=?,Quantity=?,Price=?,Discount=?,StatusId=?
+         where PId=${id}`;
+        config.query(sqlquery,[product.ProductName,product.Description,product.Image,product.CId,
+            product.Manufacturer,product.Quantity,product.Price,product.Discount,product.StatusId],(err,data)=>
         {
             if(data)
             {
@@ -108,7 +112,7 @@ const updateCategory=async(req,res)=>
                 {
                     data:data,
                     success:true,
-                    message:"Category Updated Successfully"
+                    message:"Product Updated Successfully"
                 }
             )
             }
@@ -128,12 +132,12 @@ const updateCategory=async(req,res)=>
         console.log(err);
     }
 }
-const deleteCategory=async(req,res)=>
+const deleteProduct=async(req,res)=>
 {
     var id=req.params.id;
     try
     {
-        var sqlquery=`Delete From Category where CId=${id}`;
+        var sqlquery=`Delete From Products where PId=${id}`;
         config.query(sqlquery,(err,data)=>
         {
             if(data)
@@ -142,7 +146,7 @@ const deleteCategory=async(req,res)=>
                 {
                     data:data,
                     success:true,
-                    message:"Category successfully deleted"
+                    message:"Product successfully deleted"
                 }
             )
             }
@@ -164,9 +168,9 @@ const deleteCategory=async(req,res)=>
 }
 module.exports=
 {
-    addCategory:addCategory,
-    getCategories:getCategories,
-    updateCategory:updateCategory,
-    getCategory:getCategory,
-    deleteCategory:deleteCategory,
+    addProduct:addProduct,
+    getProducts:getProducts,
+    getProduct:getProduct,
+    updateProduct:updateProduct,
+    deleteProduct:deleteProduct,
 }
