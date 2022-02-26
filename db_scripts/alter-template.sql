@@ -52,3 +52,16 @@
 -- INSERT INTO Products (ProductName,Description,Image,CId,Manufacturer,Quantity,Price,Discount,StatusId) VALUES (ProductName,Description,Image,
 -- (Select CId from Category where Category=Category),Manufacturer,Quantity,Price,Discount,
 -- (Select StatusId from StockStatus where Status=Status))
+
+create table if not exists Users(
+    id varchar(255) PRIMARY KEY not null,
+    name varchar(100) not null,
+    email varchar(100) unique not null,
+    password varchar(255) not null,
+    active bool DEFAULT false,
+    verifyToken varchar(255) NOT NULL,
+    accessToken varchar(255) NULL,
+    refreshToken varchar(255) NULL,
+    CreatedAt datetime default CURRENT_TIMESTAMP,
+    UpdatedAt datetime ON UPDATE CURRENT_TIMESTAMP
+)

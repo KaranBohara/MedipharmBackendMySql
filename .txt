@@ -1,0 +1,57 @@
+*     /{id}:
+*       get:
+*         summary: Gets a product by id
+*         tags: [Products]
+*         parameters:
+*           - in: path
+*             name: id
+*             schema:
+*               type: integer
+*             required: true
+*             description: The product id
+*         responses:
+*           "200":
+*             description: The list of products.
+*             content:
+*               application/json:
+*                 schema:
+*                   $ref: '#/components/schemas/Product'
+*           "404":
+*             description: Product not found.
+*       put:
+*         summary: Updates a product
+*         tags: [Products]
+*         parameters:
+*           - in: path
+*             name: id
+*             schema:
+*               type: integer
+*             required: true
+*             description: The product id
+*         requestBody:
+*           required: true
+*           content:
+*             application/json:
+*               schema:
+*                 $ref: '#/components/schemas/Product'
+*         responses:
+*           "204":
+*             description: Update was successful.
+*           "404":
+*             description: Product not found.
+*       delete:
+*         summary: Deletes a product by id
+*         tags: [Products]
+*         parameters:
+*           - in: path
+*             name: id
+*             schema:
+*               type: integer
+*             required: true
+*             description: The product id
+*         responses:
+*           "204":
+*             description: Delete was successful.
+*           "404":
+*             description: Product not found.
+*/
