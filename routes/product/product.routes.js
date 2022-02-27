@@ -1,3 +1,7 @@
+let express = require("express");
+let router = express.Router();
+const product = require("../../controllers/product/product.controller");
+const authenticateJWT = require("../../middleware/auth.js");
 /** 
 *@swagger
 *   components:
@@ -142,10 +146,7 @@
 *                  description: Product not found.
 */
 
-let express = require("express");
-let router = express.Router();
-const product = require("../../controllers/product/product.controller");
-router.get('/', product.getProducts);
+router.get('/',product.getProducts);
 router.get('/:id',product.getProduct);
 router.post("/", product.addProduct);
 router.put('/:id',product.updateProduct);

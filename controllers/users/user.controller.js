@@ -2,69 +2,222 @@ let config=require('../../config/config');
 require('dotenv').config();
 var uuid = require('uuid');
 const bcrypt = require("bcryptjs");
-const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
-const tokenList = {}
+const {generateJwt}=require('../../helpers/generateJwt.js');
+const {sendEmail} =require('../../helpers/mailer');
+var token;
 
 const addUser=async (req,res)=>
 {
-    let id=uuid.v4();
-    var user=req.body;
-    console.log(user);
+    var id=uuid.v4();
+    id = id.replace(/-/g, "");
+    var {name,email,password}=req.body;
     try
     {
-        bcrypt.genSalt(10,((err, salt) =>{
-            if (err) {
-              throw err
-            } else {
-              bcrypt.hash(user.password, salt, ((err, hash)=> {
+        sqlquery=`select email from Users where email=?`;
+        config.query(sqlquery,email,(err,data)=>
+        {
+            if(data[0]==null)
+            {
+            bcrypt.genSalt(10,((err, salt) =>{
                 if (err) {
                   throw err
                 } else {
-                    let token = jwt.sign(user,`${process.env.VERIFYTOKEN}`, { expiresIn: 3600})
-                    var sqlquery=`Insert into Users(id,name,email,password,verifyToken) values (?,?,?,?,?)`;
-                    config.query(sqlquery,[id,user.name,user.email,hash,token],(err,data)=>
-                    {
-                        if(data)
+                  bcrypt.hash(password, salt, ((err, hash)=> {
+                    if (err) {
+                      throw err
+                    } else {
+                        token=generateJwt(email,process.env.VERIFYTOKEN);
+                        const sendCode = sendEmail(name,email,id,token);
+                        if(sendCode)
                         {
-                            res.status(200).json(
+                        var sqlquery=`Insert into Users(id,name,email,password) values (?,?,?,?)`;
+                        config.query(sqlquery,[id,name,email,hash],(err,data)=>
+                        {
+                            if(data)
+                            {
+                                res.status(200).json(
+                                    {
+                                        data:data,
+                                        success:true,
+                                        message:"Account Created Successfully"
+                                    })
+                            }
+                            else
+                           {
+                            res.status(400).json(
                                 {
-                                    data:data,
-                                    success:true,
-                                    message:"Account Created Successfully"
-                                })
+                                    success:false,
+                                    message:err.sqlMessage,
+                                }
+                            )  
+                          }
                         }
-                        else
-                       {
+                        )
+                    }
+                    else
+                    {
                         res.status(400).json(
                             {
                                 success:false,
-                                message:err.sqlMessage,
+                                message:"Could not send verification link"
                             }
-                        )  
-                      }
+                        )
                     }
-                    )
+                    }
+                  }))
                 }
               }))
             }
-          }))
+          else
+          {
+              res.status(404).json(
+                  {
+                    success:false,
+                    message:"User with same email is already registered!"
+                  }
+              )
+          }
+        })   
     }
     catch(err)
     {
-      
+        console.log(err);
     }
+}
+const activateUser=async(req,res)=>
+{
+const {id,code}=req.params;
+try
+{
+    sqlquery=`select active from Users where id=?`;
+    config.query(sqlquery,id,(err,data)=>
+    {
+        if(data[0].active)
+        {
+            res.status(300).json(
+                {
+                    success:true,
+                    message:"Account already activated",
+                }
+            )
+        }
+    else{
+    if(!code || code!==token || !token)
+    {
+        res.status(200).json(
+            {
+                success:false,
+                message:"Token do not match or has been expired!"
+            }
+        )
+    }
+    else if(code===token)
+    {
+        sqlquery=`update Users set active=true where id=?`;
+        config.query(sqlquery,id,(err)=>
+        {
+            if(data)
+            {
+            res.status(200).json(
+                {
+                    success:true,
+                    message:"Account activated successfully!"
+                }
+            )
+            token='';
+            }
+            else
+                {
+                    res.status(400).json(
+                        {
+                            success:false,
+                            message:err.sqlMessage,
+                        }
+                    )
+                }
+        })
+    }
+    else
+    {
+        res.status(400).json(
+            {
+                success:false,
+                message:err.sqlMessage,
+            }
+        )
+    }
+}
+})
+}
+catch(err)
+{
+    console.log(err);
+}
 }
 const loginUser=async(req,res)=>
 {
-    var user=req.body;
+    const {email,password}=req.body;
     try
     {
-      
+      sqlquery=`select * from Users where email=?`;
+      config.query(sqlquery,email,(err,data)=>
+      {
+          if(data[0]!=null)
+          {
+          bcrypt.compare(password,data[0].password,(err,result)=>
+          {
+             if(result)
+             {
+                if(data[0].active)
+                {
+                    var accessToken=generateJwt(email,`${process.env.ACCESSTOKEN}`);
+                    res.json(
+                        {
+                            success:true,
+                            message:"Login Successful!",
+                            accessToken:accessToken,
+                        }
+                    )
+                }
+                else if(!data[0].active)
+                {
+                  if(!token)
+                  token=generateJwt(email,process.env.VERIFYTOKEN);
+                  const sendCode = sendEmail(data[0].name,email,data[0].id,token);
+                  if(sendCode)
+                  {
+                  res.json(
+                      {
+                          success:false,
+                          message:"Your account is not activated.Please Check your Mailbox and activate through the link",
+                      }
+                  )
+                  }
+                }
+             }
+             else{
+                res.status(404).json(
+                {
+                    success:false,
+                    message:"Wrong Password!"
+                })
+             }
+          })
+        }
+        else
+        {
+            res.status(404).json(
+                {
+                    success:false,
+                    message:"No account registered with this email!"
+                }
+            )
+        }
+      })
     }
     catch(err)
     {
-
+      console.log(err);
     }
 }
 const getUser=async(req,res)=>
@@ -105,4 +258,5 @@ module.exports=
     // getUsers:getUsers,
     getUser:getUser,
     loginUser:loginUser,
+    activateUser:activateUser,
 }
