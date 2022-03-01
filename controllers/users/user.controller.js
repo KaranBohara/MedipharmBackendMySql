@@ -39,7 +39,7 @@ const addUser=async (req,res)=>
                                     {
                                         data:data,
                                         success:true,
-                                        message:"Account Created Successfully"
+                                        message:"Account Created Successfully!Please click the activation link we sent to your email."
                                     })
                             }
                             else
@@ -174,8 +174,10 @@ const loginUser=async(req,res)=>
                     res.json(
                         {
                             success:true,
-                            message:"Login Successful!",
+                            name:data[0].name,
+                            email:email,
                             accessToken:accessToken,
+                            message:"Login Successful!",
                         }
                     )
                 }
@@ -220,7 +222,7 @@ const loginUser=async(req,res)=>
       console.log(err);
     }
 }
-const getUser=async(req,res)=>
+const getUsers=async(req,res)=>
 {
     try
     {
@@ -252,10 +254,43 @@ const getUser=async(req,res)=>
 
     }
 }
+const getUser=async(req,res)=>
+{
+    let id=req.params;
+    try
+    {
+        var sqlquery=`Select * from Users where id=?`;
+        config.query(sqlquery,id,(err,data)=>
+        {
+            if(data)
+            {
+                res.status(200).json(
+                    {
+                        data:data,
+                        success:true,
+                    }
+                )
+            }
+          else
+          {
+            res.status(400).json(
+                {
+                    success:false,
+                    message:err.sqlMessage,
+                }
+            )  
+          }
+        })
+    }
+    catch(err)
+    {
+
+    }
+}
 module.exports=
 {
     addUser:addUser,
-    // getUsers:getUsers,
+    getUsers:getUsers,
     getUser:getUser,
     loginUser:loginUser,
     activateUser:activateUser,

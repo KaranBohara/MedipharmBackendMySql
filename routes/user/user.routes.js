@@ -4,6 +4,7 @@ let user=require('../../controllers/users/user.controller');
 router.post('/register',user.addUser);
 router.post('/login',user.loginUser);
 router.get('/activate/:id/:code',user.activateUser);
-router.get('/',user.getUser);
+router.get('/',user.getUsers);
+router.get('/:id',user.getUser);
 
 module.exports=router;
