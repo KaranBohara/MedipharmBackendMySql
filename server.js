@@ -1,7 +1,5 @@
 const express = require("express");
 const app = express();
-// const morgan=require('morgan');
-// const low=require('lowdb');
 var cors = require('cors');
 const swaggerUI=require('swagger-ui-express');
 const swaggerJsDoc=require('swagger-jsdoc');
@@ -9,7 +7,7 @@ let categoryRoutes=require('./routes/category/category.routes');
 let stockstatusRoutes=require('./routes/stockstatus/stockstatus.routes');
 let productRoutes=require('./routes/product/product.routes');
 let userRoutes=require('./routes/user/user.routes');
-const port = 5000;
+const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(
   express.urlencoded({
