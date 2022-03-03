@@ -125,12 +125,12 @@ try
 
                 });
                 res.end();
-                // res.status(200).json(
-                // {
-                //     success:true,
-                //     message:"Account activated successfully!"
-                // }
-            )
+            //     res.status(200).json(
+            //     {
+            //         success:true,
+            //         message:"Account activated successfully!"
+            //     }
+            // )
             token='';
             }
             else
