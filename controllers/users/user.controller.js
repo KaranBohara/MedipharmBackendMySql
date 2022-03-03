@@ -118,11 +118,18 @@ try
         {
             if(data)
             {
-            res.status(200).json(
-                {
+                res.writeHead(200, {
+                    Location: 'https://medpharmacy-backend-mysql.herokuapp.com/api/v1/user/login',
                     success:true,
                     message:"Account activated successfully!"
-                }
+
+                });
+                res.end();
+                // res.status(200).json(
+                // {
+                //     success:true,
+                //     message:"Account activated successfully!"
+                // }
             )
             token='';
             }
