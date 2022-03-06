@@ -7,7 +7,7 @@ const getStatus=async(req,res)=>
         {
             if(data)
             {
-                res.status(200).json(
+                res.json(
                     {
                         data:data,
                         success:true,
@@ -16,7 +16,7 @@ const getStatus=async(req,res)=>
             }
           else
           {
-            res.status(400).json(
+            res.json(
                 {
                     success:false,
                     message:err.sqlMessage,
@@ -39,7 +39,7 @@ const getStatusById=async(req,res)=>
         {
             if(data)
             {
-                res.status(200).json(
+                res.json(
                     {
                         data:data,
                         success:true,
@@ -48,7 +48,7 @@ const getStatusById=async(req,res)=>
             }
           else
           {
-            res.status(400).json(
+            res.json(
                 {
                     success:false,
                     message:err.sqlMessage,

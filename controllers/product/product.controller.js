@@ -10,7 +10,7 @@ const addProduct=async (req,res) =>{
         {
             if(data)
             {
-                res.status(200).json(
+                res.json(
                     {
                         data:data,
                         success:true,
@@ -19,7 +19,7 @@ const addProduct=async (req,res) =>{
             }
             else
            {
-            res.status(400).json(
+            res.json(
                 {
                     success:false,
                     message:err.sqlMessage,
@@ -41,7 +41,7 @@ const getProducts=async(req,res)=>
         {
             if(data)
             {
-                res.status(200).json(
+                res.json(
                     {
                         data:data,
                         success:true,
@@ -50,7 +50,7 @@ const getProducts=async(req,res)=>
             }
           else
           {
-            res.status(400).json(
+            res.json(
                 {
                     success:false,
                     message:err.sqlMessage,
@@ -73,7 +73,7 @@ const getProduct=async(req,res)=>
         {
             if(data)
             {
-                res.status(200).json(
+                res.json(
                     {
                         data:data,
                         success:true,
@@ -82,7 +82,7 @@ const getProduct=async(req,res)=>
             }
           else
           {
-            res.status(400).json(
+            res.json(
                 {
                     success:false,
                     message:err.sqlMessage,
@@ -108,7 +108,7 @@ const updateProduct=async(req,res)=>
         {
             if(data)
             {
-             res.status(200).json(
+             res.json(
                 {
                     data:data,
                     success:true,
@@ -118,7 +118,7 @@ const updateProduct=async(req,res)=>
             }
             else
             {
-                res.status(400).json(
+                res.json(
                     {
                         success:false,
                         message:err.sqlMessage,
@@ -142,7 +142,7 @@ const deleteProduct=async(req,res)=>
         {
             if(data)
             {
-            res.status(200).json(
+            res.json(
                 {
                     data:data,
                     success:true,
@@ -152,7 +152,7 @@ const deleteProduct=async(req,res)=>
             }
             else
             {
-                res.status(400).json(
+                res.json(
                     {
                         success:false,
                         message:err.sqlMessage,

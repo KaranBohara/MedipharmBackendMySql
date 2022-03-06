@@ -8,7 +8,7 @@ const options = {
 const generateJwt=(email,secret )=> {
   try {
     const payload = {email};
-    const token = jwt.sign(payload,secret, options);
+    const token = jwt.sign(payload,secret,options);
     return token;
   } catch (error) {
     return {message:"acessToken not generated properly"};

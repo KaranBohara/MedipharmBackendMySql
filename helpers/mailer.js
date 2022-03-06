@@ -1,6 +1,7 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
-
+var herokuurl='https://medpharmacy-backend-mysql.herokuapp.com/api/v1/user/activate/';
+var localurl='http://localhost:5000/api/v1/user/activate/'
 const sendEmail=async(name,email,id,code) =>{
   try {
     const smtpEndpoint = "smtp.sendgrid.net";
@@ -21,7 +22,7 @@ const sendEmail=async(name,email,id,code) =>{
     var body_html = `<h1>Account Verification</h1>
     <h2>Hello ${name}</h2>
     <p>Thank you for registration. Please confirm your email by clicking on the following link</p>
-    <a target="_" href=https://medpharmacy-backend-mysql.herokuapp.com/api/v1/user/activate/${id}/${code}> Click here</a>
+    <a target="_" href=${localurl}${id}/${code}> Click here</a>
     <p>Good Day!</p>
     <p>Regards</p>
     <p>Medpiharm Team</p>

@@ -5,7 +5,8 @@ const bcrypt = require("bcryptjs");
 const {generateJwt}=require('../../helpers/generateJwt.js');
 const {sendEmail} =require('../../helpers/mailer');
 var token;
-
+var weburl='https://medipharmcy-karanbohara.vercel.app/loginclient';
+var localurl='http://localhost:3000/loginclient'
 const addUser=async (req,res)=>
 {
     var id=uuid.v4();
@@ -26,7 +27,7 @@ const addUser=async (req,res)=>
                     if (err) {
                       throw err
                     } else {
-                        token=generateJwt(email,process.env.VERIFYTOKEN);
+                        token=generateJwt(email,`${process.env.VERIFYTOKEN}`);
                         const sendCode = sendEmail(name,email,id,token);
                         if(sendCode)
                         {
@@ -35,16 +36,15 @@ const addUser=async (req,res)=>
                         {
                             if(data)
                             {
-                                res.status(200).json(
+                                res.json(
                                     {
-                                        data:data,
                                         success:true,
-                                        message:"Account Created Successfully!Please click the activation link we sent to your email."
+                                        message:"Registration Successful!Click the activation link we sent to your email."
                                     })
                             }
                             else
                            {
-                            res.status(400).json(
+                            res.json(
                                 {
                                     success:false,
                                     message:err.sqlMessage,
@@ -56,7 +56,7 @@ const addUser=async (req,res)=>
                     }
                     else
                     {
-                        res.status(400).json(
+                        res.json(
                             {
                                 success:false,
                                 message:"Could not send verification link"
@@ -70,7 +70,7 @@ const addUser=async (req,res)=>
             }
           else
           {
-              res.status(404).json(
+              res.json(
                   {
                     success:false,
                     message:"User with same email is already registered!"
@@ -94,7 +94,7 @@ try
     {
         if(data[0].active)
         {
-            res.status(300).json(
+            res.json(
                 {
                     success:true,
                     message:"Account already activated",
@@ -104,7 +104,7 @@ try
     else{
     if(!code || code!==token || !token)
     {
-        res.status(200).json(
+        res.json(
             {
                 success:false,
                 message:"Token do not match or has been expired!"
@@ -118,14 +118,9 @@ try
         {
             if(data)
             {
-                res.writeHead(200, {
-                    Location: 'https://medpharmacy-backend-mysql.herokuapp.com/api/v1/user/login',
-                    success:true,
-                    message:"Account activated successfully!"
-
-                });
-                res.end();
-            //     res.status(200).json(
+              res.redirect(`${localurl}`);
+               
+            //     res.json(
             //     {
             //         success:true,
             //         message:"Account activated successfully!"
@@ -135,7 +130,7 @@ try
             }
             else
                 {
-                    res.status(400).json(
+                    res.json(
                         {
                             success:false,
                             message:err.sqlMessage,
@@ -146,7 +141,7 @@ try
     }
     else
     {
-        res.status(400).json(
+        res.json(
             {
                 success:false,
                 message:err.sqlMessage,
@@ -175,7 +170,7 @@ const loginUser=async(req,res)=>
           {
              if(result)
              {
-                if(data[0].active)
+                if(data[0].active===1)
                 {
                     var accessToken=generateJwt(email,`${process.env.ACCESSTOKEN}`);
                     res.json(
@@ -188,10 +183,10 @@ const loginUser=async(req,res)=>
                         }
                     )
                 }
-                else if(!data[0].active)
+                else if(data[0].active===0)
                 {
                   if(!token)
-                  token=generateJwt(email,process.env.VERIFYTOKEN);
+                  token=generateJwt(email,`${process.env.VERIFYTOKEN}`);
                   const sendCode = sendEmail(data[0].name,email,data[0].id,token);
                   if(sendCode)
                   {
@@ -205,7 +200,7 @@ const loginUser=async(req,res)=>
                 }
              }
              else{
-                res.status(404).json(
+                res.json(
                 {
                     success:false,
                     message:"Wrong Password!"
@@ -215,7 +210,7 @@ const loginUser=async(req,res)=>
         }
         else
         {
-            res.status(404).json(
+            res.json(
                 {
                     success:false,
                     message:"No account registered with this email!"
@@ -238,16 +233,15 @@ const getUsers=async(req,res)=>
         {
             if(data)
             {
-                res.status(200).json(
+                res.json(
                     {
-                        data:data,
                         success:true,
                     }
                 )
             }
           else
           {
-            res.status(400).json(
+            res.json(
                 {
                     success:false,
                     message:err.sqlMessage,
@@ -271,16 +265,15 @@ const getUser=async(req,res)=>
         {
             if(data)
             {
-                res.status(200).json(
+                res.json(
                     {
-                        data:data,
                         success:true,
                     }
                 )
             }
           else
           {
-            res.status(400).json(
+            res.json(
                 {
                     success:false,
                     message:err.sqlMessage,

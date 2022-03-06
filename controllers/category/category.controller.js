@@ -8,7 +8,7 @@ const addCategory=async (req,res) =>{
         {
             if(data)
             {
-                res.status(200).json(
+                res.json(
                     {
                         data:data,
                         success:true,
@@ -17,7 +17,7 @@ const addCategory=async (req,res) =>{
             }
             else
            {
-            res.status(400).json(
+            res.json(
                 {
                     success:false,
                     message:err.sqlMessage,
@@ -39,7 +39,7 @@ const getCategories=async(req,res)=>
         {
             if(data)
             {
-                res.status(200).json(
+                res.json(
                     {
                         data:data,
                         success:true,
@@ -48,7 +48,7 @@ const getCategories=async(req,res)=>
             }
           else
           {
-            res.status(400).json(
+            res.json(
                 {
                     success:false,
                     message:err.sqlMessage,
@@ -71,7 +71,7 @@ const getCategory=async(req,res)=>
         {
             if(data)
             {
-                res.status(200).json(
+                res.json(
                     {
                         data:data,
                         success:true,
@@ -80,7 +80,7 @@ const getCategory=async(req,res)=>
             }
           else
           {
-            res.status(400).json(
+            res.json(
                 {
                     success:false,
                     message:err.sqlMessage,
@@ -104,7 +104,7 @@ const updateCategory=async(req,res)=>
         {
             if(data)
             {
-             res.status(200).json(
+             res.json(
                 {
                     data:data,
                     success:true,
@@ -114,7 +114,7 @@ const updateCategory=async(req,res)=>
             }
             else
             {
-                res.status(400).json(
+                res.json(
                     {
                         success:false,
                         message:err.sqlMessage,
@@ -138,7 +138,7 @@ const deleteCategory=async(req,res)=>
         {
             if(data)
             {
-            res.status(200).json(
+            res.json(
                 {
                     data:data,
                     success:true,
@@ -148,7 +148,7 @@ const deleteCategory=async(req,res)=>
             }
             else
             {
-                res.status(400).json(
+                res.json(
                     {
                         success:false,
                         message:err.sqlMessage,
