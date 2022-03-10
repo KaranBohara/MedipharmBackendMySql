@@ -1,9 +1,7 @@
-CREATE PROCEDURE `sp_InsertMedPharmacyProducts`(IN ProductName VARCHAR(255) ,IN Category VARCHAR(255),IN Manufacturer VARCHAR(255),
-IN Quantity bigint,IN Price bigint,IN Discount int,IN Status VARCHAR(255))
-
-INSERT INTO Medpharmacyproducts (PId,CId,MId,Quantity,Price,Discount,StatusId) VALUES ((Select PId from Products where ProductName=ProductName),
-(Select CId from Category where Category=Category),(Select MId from Manufacturer where Manufacturer=Manufacturer),Quantity,Price,Discount,
-(Select StatusId from StockStatus where Status=Status))
+-- CREATE PROCEDURE `sp_InsertProducts`(IN PId varchar(255),IN ProductName VARCHAR(255) ,IN Description VARCHAR(255),IN Image VARCHAR(255),
+-- IN Category VARCHAR(255),IN Manufacturer VARCHAR(100),IN Quantity bigint,IN Price bigint,IN Discount int,IN Status VARCHAR(255))
+-- INSERT INTO Products (PId,ProductName,Description,Image,CId,Manufacturer,Quantity,Price,Discount,StatusId) VALUES (PId,ProductName,Description,Image,
+-- (Select CId from Category where Category=Category),Manufacturer,Quantity,Price,Discount,(Select StatusId from StockStatus where Status=Status))
 -- DROP PROCEDURE IF EXISTS sp_Products;
 -- CREATE DEFINER=`ufmmjvetsmyjgpur`@`%` PROCEDURE `sp_InsertProducts`(IN PId int,IN ProductName VARCHAR(255) ,IN Description varchar(255),
 -- IN Image varchar(255),IN Category VARCHAR(255),IN Manufacturer VARCHAR(255),

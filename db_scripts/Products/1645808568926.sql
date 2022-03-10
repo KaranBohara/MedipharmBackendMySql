@@ -1,1 +1,21 @@
 insert into Products(PId,ProductName,Description,Image,CId,Manufacturer,Quantity,Price,Discount,StatusId) values('1','Face Mask','Reusable and Washable Masks','https://www.netmeds.com/images/product-v1/150x150/909963/wildcraft_hypashield_w95_reusable_outdoor_protection_face_mask_0_0.jpg','1','Novartis AG','5','399','5','2');
+CREATE TABLE `Products` (
+--   `id` int NOT NULL AUTO_INCREMENT,
+--   `PId` VARCHAR(255) NOT NULL,
+--   `ProductName` varchar(255) NOT NULL,
+--   `Description` varchar(255) DEFAULT NULL,
+--   `Image` varchar(255) NOT NULL,
+--   `CId` int DEFAULT NULL,
+--   `Manufacturer` varchar(100) NOT NULL,
+--   `Quantity` bigint NOT NULL,
+--   `Price` bigint NOT NULL,
+--   `Discount` int NOT NULL,
+--   `StatusId` int DEFAULT NULL,
+--   `CreatedAt` datetime DEFAULT CURRENT_TIMESTAMP,
+--   `UpdatedAt` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+--   PRIMARY KEY (`id`),
+--   KEY `fk_Category` (`CId`),
+--   KEY `fk_Status` (`StatusId`),
+--   CONSTRAINT `fk_Category` FOREIGN KEY (`CId`) REFERENCES `Category` (`CId`) ON DELETE CASCADE ON UPDATE CASCADE,
+--   CONSTRAINT `fk_Status` FOREIGN KEY (`StatusId`) REFERENCES `StockStatus` (`StatusId`) ON DELETE CASCADE ON UPDATE CASCADE
+-- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

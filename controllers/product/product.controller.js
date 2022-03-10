@@ -1,11 +1,13 @@
 let config = require('../../config/config');
+const ShortUniqueId = require('short-unique-id');
+const uid = new ShortUniqueId({dictionary: 'number',length:10});
 
 const addProduct=async (req,res) =>{
     var product=req.body;
+    var pid=uid();
     try {
-        var sqlquery = `Insert into Products(PId,ProductName,Description,Image,CId,Manufacturer,Quantity,Price,Discount,StatusId) 
-        Values(?,?,?,?,?,?,?,?,?,?)`;
-        config.query(sqlquery,[product.PId,product.ProductName,product.Description,product.Image,product.CId,
+        var sqlquery = `CALL sp_InsertProducts(?,?,?,?,?,?,?,?,?,?)`
+        config.query(sqlquery,[pid,product.ProductName,product.Description,product.Image,product.CId,
             product.Manufacturer,product.Quantity,product.Price,product.Discount,product.StatusId],(err,data)=>
         {
             if(data)
@@ -102,7 +104,7 @@ const updateProduct=async(req,res)=>
     var id=req.params.id;
     try{
         var sqlquery=`update Products set ProductName=?,Description=?,Image=?,CId=?,Manufacturer=?,Quantity=?,Price=?,Discount=?,StatusId=?
-         where PId=${id}`;
+         where id=${id}`;
         config.query(sqlquery,[product.ProductName,product.Description,product.Image,product.CId,
             product.Manufacturer,product.Quantity,product.Price,product.Discount,product.StatusId],(err,data)=>
         {
